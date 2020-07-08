@@ -33,7 +33,7 @@ jobs:
             set PATH=%USERPROFILE%/.cargo/bin;
     - name: Build
       run: 
-            cargo +nightly build --release --target i686-pc-windows-msvc --verbose
+            cargo +nightly-i686-pc-windows-msvc build --release --verbose
     - name: Artifact Release
       uses: actions/upload-artifact@v1
       with:
