@@ -30,7 +30,7 @@ jobs:
             .\rustup-init.exe -y --default-toolchain nightly --default-host i686-pc-windows-msvc
     - name: Set system path
       run: 
-            set PATH=%USERPROFILE%/.cargo/bin;
+            set PATH=%USERPROFILE%/.cargo/bin;%PATH%
     - name: Build
       run: 
             cargo +nightly-i686-pc-windows-msvc build -vv --release --target i686-pc-windows-msvc
