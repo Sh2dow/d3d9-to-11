@@ -1,0 +1,48 @@
+name: Rust
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Download Rust
+      uses: carlosperate/download-file-action@v1.0.3
+      with:
+            # URL of the file to download
+            file-url: https://win.rustup.rs/ 
+             # New filename to rename the downloaded file
+            file-name: rustup-init.exe
+            # Path to download the file
+            location: .
+    - name: Install Nightly Rust
+      run: 
+            .\rustup-init.exe -y --default-toolchain nightly --default-host i686-pc-windows-msvc
+    - name: Set system path
+      run: 
+            set PATH=%USERPROFILE%/.cargo/bin;
+    - name: Build
+      run: 
+            cargo +nightly build --release --target i686-pc-windows-msvc --verbose
+    - name: Artifact Release
+      uses: actions/upload-artifact@v1
+      with:
+        name: d3d9
+        path: target\i686-pc-windows-msvc\release\d3d9.dll
+    - name: Run tests
+      run: cargo test --verbose
+    - name: Artifact Release
+      uses: actions/upload-artifact@v1
+      with:
+        name: d3d9
+        path: target\i686-pc-windows-msvc\release\d3d9.dll

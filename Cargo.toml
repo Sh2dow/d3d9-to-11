@@ -20,6 +20,10 @@ comptr = { git = "https://github.com/Fraxinus001/comptr-rs" }
 com-impl = { git = "https://github.com/Fraxinus001/com-impl-rs" }
 #com-impl = { path = "../com-impl-rs" }
 bitflags = { git = "https://github.com/Fraxinus001/bitflags-1.0.0" }
+env_logger = "0.5"
+comptr = { git = "https://github.com/GabrielMajeri/comptr-rs" }
+com-impl = { git = "https://github.com/ExPixel/com-impl-rs" }
+bitflags = "1"
 nalgebra = "0.16"
 widestring = "0.4.3"
 typenum = { git = "https://github.com/Fraxinus001/typenum2018" }
