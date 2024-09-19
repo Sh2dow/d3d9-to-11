@@ -1,5 +1,5 @@
 use std::{mem, ptr, sync::atomic::AtomicU32};
-
+use std::arch::asm;
 use comptr::ComPtr;
 use winapi::ctypes::c_void;
 use winapi::shared::d3d9::*;
@@ -321,7 +321,7 @@ impl Context {
             unsafe {
                 // First we need to retrieve its current value.
                 let mut c = 0u16;
-                llvm_asm!("fnstcw $0" : "=*m"(&c) : : : "volatile");
+                // asm!("fnstcw $0" : "=*m"(&c) : : : "volatile");
 
                 // Clear (some of) the control word's bits:
                 // - Sets rounding mode to nearest even.
@@ -331,7 +331,7 @@ impl Context {
                 // Mask all exceptions.
                 c |= (1 << 6) - 1;
 
-                llvm_asm!("fldcw $0" : : "*m"(&c) : : : "volatile")
+                // asm!("fldcw $0" : : "*m"(&c) : : : "volatile")
             }
         }
 

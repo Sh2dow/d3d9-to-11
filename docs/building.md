@@ -9,11 +9,11 @@ This page provides instructions on how to build the project from source.
 This project is written in [Rust](https://www.rust-lang.org). You also need to install the latest nightly Rust compiler.
 The recommended way to do so is through [rustup](https://rustup.rs/).
 
-When installing, make sure to pick `nightly` and `i686-pc-windows-gnu` as the default toolchain / target.
-If you've already installed Rust, you also need to add the `i686-pc-windows-gnu` target to be able to cross-compile to Wine/Windows.
+When installing, make sure to pick `nightly` and `nightly-i686-pc-windows-msvc` as the default toolchain / target.
+If you've already installed Rust, you also need to add the `nightly-i686-pc-windows-msvc` target to be able to cross-compile to Wine/Windows.
 
 ```sh
-rustup target add i686-pc-windows-gnu
+rustup target add nightly-i686-pc-windows-msvc
 ```
 
 ### MinGW
@@ -33,7 +33,7 @@ cargo build
 
 And you're done. You can optionally append the `--release` flag to build an optimized release build.
 
-The built file is stored in `target/i686-pc-windows-gnu/<debug or release>/d3d9.dll`.
+The built file is stored in `target/nightly-i686-pc-windows-msvc/<debug or release>/d3d9.dll`.
 
 ### Building for 64-bit apps
 

@@ -5,7 +5,7 @@ version: 0.1.{build}
 install:
   # Install Rust through rustup
   - appveyor DownloadFile https://win.rustup.rs/ -FileName rustup-init.exe
-  - rustup-init -y --default-toolchain nightly-2018-08-19 --default-host i686-pc-windows-msvc
+  - rustup-init -y --default-toolchain nightly-2018-08-19 --default-host nightly-i686-pc-windows-msvc
   # Add to path
   - set PATH=%USERPROFILE%/.cargo/bin;%PATH%
   # Print the installed versions
@@ -15,15 +15,15 @@ install:
   - rustup update
 
 build_script:
-  - cargo fix --edition
-  - cargo build --release --target i686-pc-windows-msvc
+  - cargo +nightly fix --edition
+  - cargo +nightly build --release --target nightly-i686-pc-windows-msvc --verbose
 
 # Save the built DLL.
 artifacts:
-- path: target\i686-pc-windows-msvc\release\d3d9.dll
+- path: target\nightly-i686-pc-windows-msvc\release\d3d9.dll
   name: D3D9
 
 cache:
   - target
-  - C:\Users\appveyor\.cargo\
-  - C:\Users\appveyor\.rustup\
+  - D:\Users\appveyor\.cargo\
+  - D:\Users\appveyor\.rustup\

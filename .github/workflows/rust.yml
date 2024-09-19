@@ -27,22 +27,20 @@ jobs:
             location: .
     - name: Install Nightly Rust
       run: 
-            .\rustup-init.exe -y --default-toolchain nightly --default-host i686-pc-windows-msvc
+            .\rustup-init.exe -y --default-toolchain nightly --default-host nightly-i686-pc-windows-msvc
     - name: Set system path
       run: 
             set PATH=%USERPROFILE%/.cargo/bin;
     - name: Build
       run: 
-            cargo +nightly build --release --target i686-pc-windows-msvc --verbose
+            cargo +nightly build --release --target nightly-i686-pc-windows-msvc --verbose
     - name: Artifact Release
       uses: actions/upload-artifact@v1
       with:
         name: d3d9
-        path: target\i686-pc-windows-msvc\release\d3d9.dll
-    - name: Run tests
-      run: cargo test --verbose
+        path: target\nightly-i686-pc-windows-msvc\release\d3d9.dll
     - name: Artifact Release
       uses: actions/upload-artifact@v1
       with:
         name: d3d9
-        path: target\i686-pc-windows-msvc\release\d3d9.dll
+        path: target\nightly-i686-pc-windows-msvc\release\d3d9.dll

@@ -15,7 +15,7 @@ Building and running the tests is quite straightforward.
 export WINEDEBUG=-all
 export DXVK_LOG_LEVEL=none
 
-cargo build --target x86_64-pc-windows-gnu
+cargo build --target x86_64-pc-windows-
 cargo run --package d3d9-tests --target x86_64-pc-windows-gnu
 ```
 

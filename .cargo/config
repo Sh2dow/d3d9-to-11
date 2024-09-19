@@ -1,21 +1,17 @@
 [build]
-# Default target to build for is 32-bit Windows.
-#target = "i686-pc-windows-gnu"
-target = "i686-pc-windows-msvc"
+# Default target to build for is 32-bit Windows with MSVC.
+target = "nightly-i686-pc-windows-msvc"
 
 rustflags = [
-    "-C", "panic=abort",
+    # "-C", "panic=abort",
     # We need the stdcall fixups to fix the name of the exported symbols.
-    #"-C", "link-args=toolchain/d3d9.def -Wl,--enable-stdcall-fixup"#,
+    # "-C", "link-args=toolchain/d3d9.def -Wl,--enable-stdcall-fixup",
 ]
 
-[target.i686-pc-windows-gnu]
-linker = "i686-w64-mingw32-gcc"
+[target.nightly-i686-pc-windows-msvc]
+# Use the MSVC linker (which is included in Visual Studio)
+linker = "link.exe"
 rustflags = [
-    "-C", "panic=abort",
-    # We need the stdcall fixups to fix the name of the exported symbols.
-    "-C", "link-args=toolchain/d3d9.def -Wl,--enable-stdcall-fixup"
+    # "-C", "panic=abort",  # Configure panic behavior to abort for release builds
+    "-C", "link-args=toolchain/d3d9.def -Wl,--enable-stdcall-fixup"  # Custom linker arguments
 ]
-
-[target.x86_64-pc-windows-gnu]
-linker = "x86_64-w64-mingw32-gcc"

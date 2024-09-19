@@ -1,7 +1,7 @@
 //! Direct3D 9 to Direct3D 11 / DXGI converter.
 
 #![feature(arbitrary_self_types)]
-#![feature(llvm_asm)]
+#![feature(asm)]
 #![feature(integer_atomics)]
 #![cfg_attr(feature = "cargo-clippy", warn(clippy))]
 #![cfg_attr(
