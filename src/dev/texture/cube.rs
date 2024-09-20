@@ -29,7 +29,7 @@ impl CubeTexture {
         device: *const Device,
         texture: d3d11::Texture2D,
         levels: u32,
-        usage: UsageFlags,
+        mut usage: UsageFlags,
         pool: MemoryPool,
     ) -> ComPtr<Self> {
         let tc = Self {

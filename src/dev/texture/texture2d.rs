@@ -29,7 +29,7 @@ impl Texture {
         pool: MemoryPool,
         texture: d3d11::Texture2D,
         levels: u32,
-        usage: UsageFlags,
+        mut usage: UsageFlags,
     ) -> ComPtr<Self> {
         let texture = Self {
             __vtable: Box::new(Self::create_vtable()),
@@ -74,7 +74,7 @@ impl Texture {
 
     /// Retrieves a surface representing a mip level of this texture.
     fn get_surface_level(&self, level: u32, ret: *mut *mut Surface) -> Error {
-        let ret = check_mut_ref(ret)?;
+        let ret = check_mut_ref(ret).unwrap();
 
         if level >= self.level_count() {
             return Error::InvalidCall;
@@ -100,12 +100,12 @@ impl Texture {
         _r: *const RECT,
         flags: LockFlags,
     ) -> Error {
-        let ret = check_mut_ref(ret)?;
+        let ret = check_mut_ref(ret).unwrap();
 
         let resource = self.texture.as_resource();
         let ctx = self.device_context();
 
-        *ret = ctx.map(resource, level, flags, self.usage())?;
+        *ret = ctx.map(resource, level, flags, self.usage()).unwrap();
 
         Error::Success
     }
@@ -121,7 +121,7 @@ impl Texture {
     }
 
     fn add_dirty_rect(&mut self, r: *const RECT) -> Error {
-        let _r = check_ref(r)?;
+        let _r = check_ref(r).unwrap();
         warn!("AddDirtyRect is not implemented");
         Error::Success
     }

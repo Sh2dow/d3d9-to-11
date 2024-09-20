@@ -22,7 +22,7 @@ impl Texture2D {
         device: &ID3D11Device,
         (width, height): (u32, u32),
         levels: u32,
-        uflags: UsageFlags,
+        mut uflags: UsageFlags,
         fmt: D3DFORMAT,
         pool: MemoryPool,
     ) -> Result<Self> {

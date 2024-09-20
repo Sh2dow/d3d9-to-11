@@ -115,8 +115,8 @@ impl Context {
         _flags: u32,
         ident: *mut D3DADAPTER_IDENTIFIER9,
     ) -> Error {
-        let adapter = self.check_adapter(adapter)?;
-        let ident = check_mut_ref(ident)?;
+        let adapter = self.check_adapter(adapter).unwrap();
+        let ident = check_mut_ref(ident).unwrap();
 
         *ident = adapter.identifier();
 
@@ -139,10 +139,10 @@ impl Context {
         i: u32,
         mode: *mut D3DDISPLAYMODE,
     ) -> Error {
-        let adapter = self.check_adapter(adapter)?;
-        let mode = check_mut_ref(mode)?;
+        let adapter = self.check_adapter(adapter).unwrap();
+        let mode = check_mut_ref(mode).unwrap();
 
-        *mode = adapter.mode(fmt, i).ok_or(Error::NotAvailable)?;
+        *mode = adapter.mode(fmt, i).ok_or(Error::NotAvailable).unwrap();
 
         Error::Success
     }
@@ -150,7 +150,7 @@ impl Context {
     /// Retrieve the current display mode of the GPU.
     fn get_adapter_display_mode(&self, adapter: u32, mode: *mut D3DDISPLAYMODE) -> Error {
         let monitor = self.get_adapter_monitor(adapter);
-        let mode = check_mut_ref(mode)?;
+        let mode = check_mut_ref(mode).unwrap();
 
         let mi = unsafe {
             let mut mi: winuser::MONITORINFO = mem::MaybeUninit::uninit().assume_init();
@@ -181,7 +181,7 @@ impl Context {
         _bb_fmt: D3DFORMAT,
         _windowed: u32,
     ) -> Error {
-        self.check_adapter(adapter)?;
+        self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
 
         // We support hardware accel with all valid formats.
@@ -202,7 +202,7 @@ impl Context {
         rt: ResourceType,
         check_fmt: D3DFORMAT,
     ) -> Error {
-        let adapter = self.check_adapter(adapter)?;
+        let adapter = self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
 
         if adapter.is_format_supported(check_fmt, rt, usage) {
@@ -222,7 +222,7 @@ impl Context {
         mst: D3DMULTISAMPLE_TYPE,
         quality: *mut u32,
     ) -> Error {
-        let adapter = self.check_adapter(adapter)?;
+        let adapter = self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
 
         let quality = check_mut_ref(quality);
@@ -251,7 +251,7 @@ impl Context {
         _rt_fmt: D3DFORMAT,
         ds_fmt: D3DFORMAT,
     ) -> Error {
-        self.check_adapter(adapter)?;
+        self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
 
         // We don't check the adapter fmt / render target fmt since on modern GPUs
@@ -274,7 +274,7 @@ impl Context {
         _src_fmt: D3DFORMAT,
         _tgt_fmt: D3DFORMAT,
     ) -> Error {
-        self.check_adapter(adapter)?;
+        self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
 
         // For most types we can simply convert them to the right format on-the-fly.
@@ -285,9 +285,9 @@ impl Context {
 
     /// Returns a structure describing the features and limits of an adapter.
     fn get_device_caps(&self, adapter: u32, ty: D3DDEVTYPE, caps: *mut D3DCAPS9) -> Error {
-        let adapter = self.check_adapter(adapter)?;
+        let adapter = self.check_adapter(adapter).unwrap();
         self.check_devty(ty)?;
-        let caps = check_mut_ref(caps)?;
+        let caps = check_mut_ref(caps).unwrap();
 
         *caps = adapter.caps();
 
@@ -312,7 +312,7 @@ impl Context {
         device: *mut *mut Device,
     ) -> Error {
         self.check_devty(ty)?;
-        let ret = check_mut_ref(device)?;
+        let ret = check_mut_ref(device).unwrap();
 
         // TODO: support using multiple GPUs
         if flags & D3DCREATE_ADAPTERGROUP_DEVICE != 0 {
@@ -324,7 +324,7 @@ impl Context {
             unsafe {
                 // First we need to retrieve its current value.
                 let mut c = 0u16;
-                asm!("fnstcw $0" : "=*m"(&c) : : : "volatile");
+                // asm!("fnstcw $0" : "=*m"(&c) : : : "volatile");
 
                 // Clear (some of) the control word's bits:
                 // - Sets rounding mode to nearest even.
@@ -334,7 +334,7 @@ impl Context {
                 // Mask all exceptions.
                 c |= (1 << 6) - 1;
 
-                asm!("fldcw $0" : "*m"(&c) : : : "volatile")
+                // asm!("fldcw $0" : "*m"(&c) : : : "volatile")
             }
         }
 
@@ -348,16 +348,16 @@ impl Context {
 
         // This structure describes some settings for the back buffer(s).
         // Since we don't support multiple adapters, we only use the first param in the array.
-        let pp = check_mut_ref(pp)?;
+        let pp = check_mut_ref(pp).unwrap();
 
         // Create the actual device.
         *ret = crate::Device::new(
             self,
-            self.check_adapter(adapter)?,
+            self.check_adapter(adapter).unwrap(),
             cp,
             pp,
             self.factory.clone(),
-        )?.into();
+        ).unwrap().into();
 
         Error::Success
     }
