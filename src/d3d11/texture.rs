@@ -205,7 +205,7 @@ impl Texture2D {
     /// Retrieves the description of this texture.
     pub fn desc(&self) -> D3D11_TEXTURE2D_DESC {
         unsafe {
-            let mut desc = mem::uninitialized();
+            let mut desc = mem::MaybeUninit::uninit().assume_init();
             self.texture.GetDesc(&mut desc);
             desc
         }

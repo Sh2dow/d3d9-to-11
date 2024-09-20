@@ -70,7 +70,7 @@ impl DeviceContext {
 
         // Try to map the subresource.
         let mapped = unsafe {
-            let mut buf = mem::uninitialized();
+            let mut buf = mem::MaybeUninit::uninit().assume_init();
             let result = self.Map(res, subres, map_flags, gpu_flags, &mut buf);
 
             match result {

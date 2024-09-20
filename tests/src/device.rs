@@ -192,28 +192,28 @@ impl Surface {
     /// Gets the description of a surface.
     fn desc(&self) -> D3DSURFACE_DESC {
         unsafe {
-            let mut desc = mem::MaybeUninit::uninit().assume_init();
-            let result = self.surface.GetDesc(&mut desc);
+            let mut desc = mem::MaybeUninit::<D3DSURFACE_DESC>::uninit();
+            let result = self.surface.GetDesc(desc.as_mut_ptr());
             assert_eq!(result, 0, "Failed to get surface description");
-            desc
+            desc.assume_init()
         }
     }
 
     /// Maps the surface to CPU-accessible memory.
     /// Returns a pointer to the data and the data's stride.
     fn map<T>(&self, flags: u32) -> (*mut T, usize) {
-        unsafe {
-            let mut lr = mem::MaybeUninit::uninit().assume_init();
+    unsafe {
+        let mut lr = mem::MaybeUninit::<D3DLOCKED_RECT>::uninit();
 
-            let result = self.surface.LockRect(&mut lr, ptr::null(), flags);
-            assert_eq!(result, 0, "Failed to map surface");
+        let result = self.surface.LockRect(lr.as_mut_ptr(), ptr::null(), flags);
+        assert_eq!(result, 0, "Failed to map surface");
 
-            let ptr = lr.pBits as *mut T;
-            let stride = lr.Pitch as usize / mem::size_of::<T>();
+        let ptr = lr.assume_init().pBits as *mut T;
+        let stride = lr.assume_init().Pitch as usize / mem::size_of::<T>();
 
-            (ptr, stride)
-        }
+        (ptr, stride)
     }
+}
 
     fn unmap(&self) {
         unsafe {

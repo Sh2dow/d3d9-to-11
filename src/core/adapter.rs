@@ -39,7 +39,7 @@ impl Adapter {
         let adapter = ComPtr::new(adapter);
 
         let adapter_desc = unsafe {
-            let mut desc = mem::uninitialized();
+            let mut desc = mem::MaybeUninit::uninit().assume_init();
             let result = adapter.GetDesc(&mut desc);
 
             check_hresult(result, "Failed to get adapter description")?;
@@ -67,7 +67,7 @@ impl Adapter {
             .as_ref()
             .ok_or(Error::NotFound)
             .and_then(|output| unsafe {
-                let mut desc = mem::uninitialized();
+                let mut desc = mem::MaybeUninit::uninit().assume_init();
                 let result = output.GetDesc(&mut desc);
 
                 check_hresult(result, "Failed to get output description")?;

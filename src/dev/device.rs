@@ -241,7 +241,7 @@ impl Device {
         // We also need to update the viewport.
         let (width, height) = unsafe {
             let rt = self.render_targets[0].as_ref().unwrap();
-            let mut desc = mem::uninitialized();
+            let mut desc = mem::MaybeUninit::uninit().assume_init();
             rt.get_desc(&mut desc);
             (desc.Width, desc.Height)
         };

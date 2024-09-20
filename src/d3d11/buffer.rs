@@ -55,7 +55,7 @@ impl Buffer {
     /// Retrieves the description of this buffer.
     pub fn desc(&self) -> D3D11_BUFFER_DESC {
         unsafe {
-            let mut buf = mem::uninitialized();
+            let mut buf = mem::MaybeUninit::uninit().assume_init();
             self.buffer.GetDesc(&mut buf);
             buf
         }
