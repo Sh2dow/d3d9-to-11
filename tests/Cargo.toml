@@ -8,12 +8,19 @@ license = "LGPL3+"
 edition = "2018"
 
 [dependencies]
-comptr = { git = "https://github.com/GabrielMajeri/comptr-rs" }
-winit = "0.17"
+comptr = { git = "https://github.com/simulasi2/comptr-rs" }
+winit = "0.28.7"
+log = "0.4.22"
 
 [dependencies.winapi]
-version = "0.3"
+version = "0.3.9"
 features = [
+    "winuser",
     "winerror",
     "d3d9",
+    "d3d9types",
+    "ntdef",
+    "dxgi",
+    "d3d11",
+    "windowsx"
 ]

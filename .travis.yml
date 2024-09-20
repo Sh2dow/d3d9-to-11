@@ -9,7 +9,7 @@ rust:
 cache: cargo
 
 install:
-  - rustup target add i686-pc-windows-gnu
+  - rustup target add i686-pc-windows-msvc
 
 # Only build, but don't run the tests,
 # since we don't have a GPU in Travis.

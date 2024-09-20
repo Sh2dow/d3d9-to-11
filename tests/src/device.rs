@@ -192,7 +192,7 @@ impl Surface {
     /// Gets the description of a surface.
     fn desc(&self) -> D3DSURFACE_DESC {
         unsafe {
-            let mut desc = mem::uninitialized();
+            let mut desc = mem::MaybeUninit::uninit().assume_init();
             let result = self.surface.GetDesc(&mut desc);
             assert_eq!(result, 0, "Failed to get surface description");
             desc
@@ -203,7 +203,7 @@ impl Surface {
     /// Returns a pointer to the data and the data's stride.
     fn map<T>(&self, flags: u32) -> (*mut T, usize) {
         unsafe {
-            let mut lr = mem::uninitialized();
+            let mut lr = mem::MaybeUninit::uninit().assume_init();
 
             let result = self.surface.LockRect(&mut lr, ptr::null(), flags);
             assert_eq!(result, 0, "Failed to map surface");
